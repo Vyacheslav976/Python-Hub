@@ -16,3 +16,5 @@ waiter = WebDriverWait(driver, 60).until(
 src = driver.find_element(By.CSS_SELECTOR, "#award").get_attribute("src")
 
 print(src)
+
+driver.quit()
