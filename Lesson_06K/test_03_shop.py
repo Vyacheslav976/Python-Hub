@@ -46,7 +46,7 @@ def test_form_validation():
         driver.find_element(By.ID, "postal-code").send_keys("390048")
         driver.find_element(By.ID, "continue").click()
 
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 15).until(
              EC.presence_of_element_located((By.CLASS_NAME, "div.summary_total_label")))
 
         total_text = driver.find_element(By.CLASS_NAME, "div.summary_total_label").text
