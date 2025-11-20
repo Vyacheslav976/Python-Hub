@@ -2,7 +2,7 @@ from APIYougile import YougileApi
 
 api = YougileApi("https://ru.yougile.com")
 login = 'volkovs976@rambler.ru'
-password = 'volkovs976@rambler.ru'
+password = 'Wl92abz175'
 id_company = 'd3207efd-dea6-406d-a320-6bc7778753ce'
 title_project = 'SkyPro'
 new_title_project = 'SkyPro_new'
@@ -11,13 +11,15 @@ users = {}
 
 def test_positive_create_project():
     # 1. получить токен
-    token_company_response = api.create_key(login, password, id_company)
+    keys_response = api.get_existing_keys(login, password, id_company)
 
-    assert token_company_response.status_code == 201, (
-        f"Failed to get token:{token_company_response.status_code}"
-        f" - {token_company_response.text}"
+    assert keys_response.status_code == 200, (
+        f"Failed to get keys:{keys_response.status_code}"
+        f" - {keys_response.text}"
     )
-    token_company = token_company_response.json()["key"]
+    keys_list = keys_response.json()
+    assert len(keys_list) > 0, "No active keys found"
+    token_company = keys_list[0]["key"]
 
     # 2. Создать проект
     create_project_response = api.create_project(title_project, token_company)
@@ -49,13 +51,15 @@ def test_negative_create_project():
 
 
 def test_positive_change_project_id():
-    token_company_response = api.create_key(login, password, id_company)
+    keys_response = api.get_existing_keys(login, password, id_company)
 
-    assert token_company_response.status_code == 201, (
-        f"Failed to get token: {token_company_response.status_code}"
-        f" - {token_company_response.text}"
+    assert keys_response.status_code == 200, (
+        f"Failed to get keys:{keys_response.status_code}"
+        f" - {keys_response.text}"
     )
-    token_company = token_company_response.json()["key"]
+    keys_list = keys_response.json()
+    assert len(keys_list) > 0, "No active keys found"
+    token_company = keys_list[0]["key"]
     create_project_response = api.create_project(title_project, token_company)
 
     assert create_project_response.status_code == 201, (
@@ -82,13 +86,15 @@ def test_positive_change_project_id():
 
 
 def test_negative_change_project_id():
-    token_company_response = api.create_key(login, password, id_company)
+    keys_response = api.get_existing_keys(login, password, id_company)
 
-    assert token_company_response.status_code == 201, (
-        f"Failed to get token: {token_company_response.status_code}"
-        f" - {token_company_response.text}"
+    assert keys_response.status_code == 200, (
+        f"Failed to get keys:{keys_response.status_code}"
+        f" - {keys_response.text}"
     )
-    token_company = token_company_response.json()["key"]
+    keys_list = keys_response.json()
+    assert len(keys_list) > 0, "No active keys found"
+    token_company = keys_list[0]["key"]
 
     # изменить название проекта
     id_project = 'none-project-id'
@@ -108,13 +114,15 @@ def test_negative_change_project_id():
 
 
 def test_positive_get_project_id():
-    token_company_response = api.create_key(login, password, id_company)
+    keys_response = api.get_existing_keys(login, password, id_company)
 
-    assert token_company_response.status_code == 201, (
-        f" Failed to get token: {token_company_response.status_code}"
-        f" - {token_company_response.text}"
+    assert keys_response.status_code == 200, (
+        f"Failed to get keys:{keys_response.status_code}"
+        f" - {keys_response.text}"
     )
-    token_company = token_company_response.json()["key"]
+    keys_list = keys_response.json()
+    assert len(keys_list) > 0, "No active keys found"
+    token_company = keys_list[0]["key"]
 
     create_project_response = api.create_project(title_project, token_company)
 
@@ -136,13 +144,15 @@ def test_positive_get_project_id():
 
 
 def test_negative_get_project_id():
-    token_company_response = api.create_key(login, password, id_company)
+    keys_response = api.get_existing_keys(login, password, id_company)
 
-    assert token_company_response.status_code == 201, (
-        f"Ошибка получения токена: {token_company_response.status_code}"
-        f" - {token_company_response.text}"
+    assert keys_response.status_code == 200, (
+        f"Failed to get keys:{keys_response.status_code}"
+        f" - {keys_response.text}"
     )
-    token_company = token_company_response.json()["key"]
+    keys_list = keys_response.json()
+    assert len(keys_list) > 0, "No active keys found"
+    token_company = keys_list[0]["key"]
 
     # 2. Получить информацию проекта по ID
     id_project = 'none-project-id'
